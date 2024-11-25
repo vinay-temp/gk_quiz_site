@@ -72,23 +72,23 @@ function STARTQUIZ(data) {
 
 function UpdateQuiz(data) {
   document.getElementById("msg").style.color = "#121212";
-
+  document.getElementById("score").innerHTML = `${score}/${totalScore}`;
+  options.innerHTML = "";
+  clickCount = 0;
+  
   if (score == totalScore) {
     document.getElementById("question").innerHTML = "Completed";
     document.getElementById("score").innerHTML = `${score}/${totalScore}`;
     return;
   }
-
+  
   let num = Math.floor(Math.random() * totalScore);
   while (seen.has(num)) {
     num = Math.floor(Math.random() * totalScore);
   }
-
+  
   let q = data[num];
   document.getElementById("question").innerHTML = q.question;
-  document.getElementById("score").innerHTML = `${score}/${totalScore}`;
-  options.innerHTML = "";
-  clickCount = 0;
 
   updateOptions(data, q, num);
 }
@@ -110,10 +110,12 @@ function updateOptions(data, q, num) {
     console.log("updated");
     option.addEventListener("click", () => {
       if (q.answer == option.value) {
-        if (clickCount == 0) score++;
+        if (clickCount == 0) {
+          score++;
+          seen.add(num);
+        }
         document.getElementById("score").innerHTML = `${score}/${totalScore}`;
         option.style.background = "green";
-        seen.add(num);
         clickCount++;
 
         if (clickCount == 2) {
