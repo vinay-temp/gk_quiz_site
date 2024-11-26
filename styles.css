@@ -58,7 +58,7 @@ pre {
 
 #msg {
   font-family: monospace;
-  margin-top: 15px;
+  margin: 15px;
 }
 
 .option {
@@ -125,4 +125,8 @@ h6 {
   -webkit-user-select: none; /* Safari and older webkit browsers */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+#home-link {
+    color: rgb(11, 117, 216);
 }
