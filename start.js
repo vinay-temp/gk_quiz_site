@@ -40,7 +40,14 @@ function UpdateQuiz(data) {
 }
 
 function updateOptions(data, q, num) {
-  for (let i = 1; i <= 4; i++) {
+  let numbers = [1, 2, 3, 4];
+
+  for (let i = numbers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // Random index
+    [numbers[i], numbers[j]] = [numbers[j], numbers[i]]; // Swap elements
+  }
+
+  numbers.forEach((i) => {
     let option = document.createElement("button");
 
     option.className = "option";
@@ -50,7 +57,7 @@ function updateOptions(data, q, num) {
     option.value = q[option.id];
 
     options.appendChild(option);
-  }
+  });
 
   options.childNodes.forEach((option) => {
     option.addEventListener("click", () => {
