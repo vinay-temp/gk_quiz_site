@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GK quiz</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="quiz-container" id="category-select">
-        <h1><u>GK Practice</u></h1>
-        <div class="options" id="topics"></div>
-        <button class="category hidden" id="goback">Go Back</button>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="start-page">
+      <h3 id="start-msg">Select Topics to Start</h3>
+      <div class="quiz-container">
+        <div id="category-select"></div>
+
+        <div id="select-all"></div>
+        <button
+          id="start"
+          class="category"
+          style="background-color: rgb(63, 135, 63)"
+        >
+          Start
+        </button>
+
+        <div style="font-size: 12px; margin-top: 10px">
+          * brackets shows no. of questions in each topic.
+        </div>
+        <a href="" style="color: white; margin-top: 10px"
+          >Click to see full database</a
+        >
+
+        <!-- <div class="options" id="topics"></div> -->
+        <!-- <button class="category hidden" id="goback">Go Back</button> -->
+      </div>
     </div>
 
     <div class="quiz-container hidden" id="quiz-container">
-        <div id="question"></div>
-        <div class="options" id="options">
-        </div>
-        <h4 id="score"></h4>
+      <div id="question"></div>
+      <div class="options" id="options"></div>
+      <h4 id="score"></h4>
 
-        <h4 id="tips"></h4>
-        <div id="msg">Click again to continue</div>
+      <h4 id="tips"></h4>
+      <div id="msg">Click again to continue</div>
     </div>
 
     <script src="script.js"></script>
-
-</body>
+  </body>
 </html>

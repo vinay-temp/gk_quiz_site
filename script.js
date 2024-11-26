@@ -1,43 +1,73 @@
-const topic_container = document.getElementById("topics");
-const go_back_btn = document.getElementById("goback");
-const quiz_container = document.getElementById("quiz-container");
-const options = document.getElementById("options");
+const category_select = document.getElementById("category-select");
 
-function createTopics(data) {
-  topic_container.innerHTML = "";
-  go_back_btn.classList.add("hidden");
+function createPage(data) {
+  category_select.innerHTML = "";
+  let totalSize = 0;
+  let allSelected = false;
 
   Object.keys(data).forEach((topic) => {
-    let btn = document.createElement("button");
-    btn.className = "category";
-    btn.value = topic;
-    btn.innerHTML = topic;
+    let topic_div = document.createElement("div");
+    topic_div.className = "topic";
 
-    btn.addEventListener("click", () => {
-      createSubtopics(data[topic]);
+    let subtopics = document.createElement("div");
+    subtopics.className = "subtopics";
+
+    Object.keys(data[topic]).forEach((subtopic) => {
+      let subtopic_div = document.createElement("div");
+      subtopic_div.className = "subtopic";
+
+      subtopic_div.id = `${topic}-${subtopic}`;
+
+      let name = subtopic[0].toUpperCase() + subtopic.slice(1);
+      let size = data[topic][subtopic].length;
+      totalSize += size;
+
+      subtopic_div.innerHTML = `<input type="checkbox" /> ${name} (${size})`;
+      subtopics.appendChild(subtopic_div);
+
+      subtopic_div.addEventListener("click", () => {
+        subtopic_div.getElementsByTagName("input")[0].checked =
+          !subtopic_div.getElementsByTagName("input")[0].checked;
+      });
     });
 
-    topic_container.appendChild(btn);
+    topic_div.innerHTML = `<h6>${topic[0].toUpperCase() + topic.slice(1)}</h6>`;
+    topic_div.appendChild(subtopics);
+    category_select.appendChild(topic_div);
   });
-}
 
-function createSubtopics(data) {
-  topic_container.innerHTML = "";
-  go_back_btn.classList.remove("hidden");
+  let select_all = document.getElementById("select-all");
 
-  Object.keys(data).forEach((subtopic) => {
-    let btn = document.createElement("button");
-    btn.className = "category";
-    btn.value = subtopic;
-    btn.innerHTML = subtopic;
+  select_all.innerHTML = `<input type="checkbox" /> Select all (${totalSize})`;
+  select_all.addEventListener("click", () => {
+    let checks = document.getElementsByTagName("input");
+    for (let i = 0; i < checks.length; i++) checks[i].checked = !allSelected;
+    allSelected = !allSelected;
+  });
 
-    btn.addEventListener("click", () => {
-      document.getElementById("category-select").classList.add("hidden");
-      quiz_container.classList.remove("hidden");
-      STARTQUIZ(data[subtopic]);
+  document.getElementById("start").addEventListener("click", () => {
+    let selected_data = {};
+
+    document.querySelectorAll(".subtopic").forEach((subtopic_div) => {
+      if (subtopic_div.getElementsByTagName("input")[0].checked) {
+        let [topic, subtopic] = subtopic_div.id.split("-");
+        if (!selected_data[topic]) selected_data[topic] = [];
+        selected_data[topic].push(subtopic);
+      }
     });
 
-    topic_container.appendChild(btn);
+    let question_set = [];
+    Object.keys(selected_data).forEach((topic) => {
+      selected_data[topic].forEach((subtopic) => {
+        question_set.push(...data[topic][subtopic]);
+      });
+    });
+
+    if (question_set.length == 0) return;
+
+    document.getElementById("start-page").classList.add("hidden");
+    document.getElementById("quiz-container").classList.remove("hidden");
+    STARTQUIZ(question_set);
   });
 }
 
@@ -45,12 +75,7 @@ fetch("https://gk-server.glitch.me/get_database")
   .then((res) => res.json()) // Parse the JSON response
   .then((res) => {
     let data = JSON.parse(JSON.stringify(res)).database;
-
-    createTopics(data);
-
-    go_back_btn.addEventListener("click", () => {
-      createTopics(data);
-    });
+    createPage(data);
   })
   .catch((error) => {
     console.error("Error fetching data:", error);
@@ -111,7 +136,6 @@ function updateOptions(data, q, num) {
 
   options.childNodes.forEach((option) => {
     option.addEventListener("click", () => {
-
       document.getElementById("tips").classList.remove("hidden");
 
       if (q.answer == option.value) {
