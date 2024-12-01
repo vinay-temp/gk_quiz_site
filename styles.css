@@ -85,10 +85,16 @@ pre {
   width: 20%;
 }
 
-#question,
-#tips {
+#question {
   white-space: pre-wrap;
   font-family: Verdana, Geneva, sans-serif;
+  text-align: left;
+  margin-left: 30px;
+}
+
+#tips {
+  white-space: pre-wrap;
+  font-family: monospace;
   text-align: left;
   margin-left: 30px;
 }
